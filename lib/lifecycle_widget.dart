@@ -14,23 +14,61 @@ class _LifeCycleWidgetState extends State<LifeCycleWidget> {
   TextEditingController textControllerNumber2 = TextEditingController();
   var result;
 
-  void onPressButtonPlus(){
+  void onPressButtonPlus() {
     var textNumber1 = textControllerNumber1.text;
     var textNumber2 = textControllerNumber2.text;
-    setState() {
-      if (textNumber1.isNotEmpty && textNumber2.isNotEmpty) {
-        result = int.parse(textNumber1) + int.parse(textNumber2);
+    setState(() {
+      if (textNumber1.isEmpty || textNumber2.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Data empty")));
+        result = null;
+        return;
       }
-    }
+      setState(() {
+        result = int.parse(textNumber1) + int.parse(textNumber2);
+      });
+    });
   }
   void onPressButtonMinute(){
-
+    var textNumber1 = textControllerNumber1.text;
+    var textNumber2 = textControllerNumber2.text;
+    setState(() {
+      if (textNumber1.isEmpty || textNumber2.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Data empty")));
+        result = null;
+        return;
+      }
+      setState(() {
+        result = int.parse(textNumber1) - int.parse(textNumber2);
+      });
+    });
   }
   void onPressButtonCore(){
-
+    var textNumber1 = textControllerNumber1.text;
+    var textNumber2 = textControllerNumber2.text;
+    setState(() {
+      if (textNumber1.isEmpty || textNumber2.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Data empty")));
+        result = null;
+        return;
+      }
+      setState(() {
+        result = int.parse(textNumber1) * int.parse(textNumber2);
+      });
+    });
   }
   void onPressButtonDivide(){
-
+    var textNumber1 = textControllerNumber1.text;
+    var textNumber2 = textControllerNumber2.text;
+    setState(() {
+      if (textNumber1.isEmpty || textNumber2.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Data empty")));
+        result = null;
+        return;
+      }
+      setState(() {
+        result = int.parse(textNumber1) / int.parse(textNumber2);
+      });
+    });
   }
 
   void initState() {
@@ -63,6 +101,7 @@ class _LifeCycleWidgetState extends State<LifeCycleWidget> {
         constraints: BoxConstraints.expand(),
         child: SingleChildScrollView(
           child: Container(
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
