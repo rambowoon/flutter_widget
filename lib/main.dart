@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/demo_key_widget.dart';
+import 'package:untitled/inherited_widget.dart';
 import 'package:untitled/lifecycle_widget.dart';
 
 void main() {
@@ -18,9 +20,11 @@ class MyApp extends StatelessWidget {
         fontFamily: "Roboto",
       ),
       routes: {
-        "/lifecycle-widget": (context) => LifeCycleWidget()
+        "/lifecycle-widget": (context) => LifeCycleWidget(),
+        "/demo_key_inherited_widget": (context) => DemoKeyWidget(),
+        "/inherited_widget": (context) => DemoInheritedWidget(),
       },
-      initialRoute: "/lifecycle-widget",
+      initialRoute: "/inherited_widget",
     );
   }
 }
