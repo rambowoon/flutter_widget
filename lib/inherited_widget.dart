@@ -1,70 +1,88 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+class DemoInheritedWidget extends StatelessWidget {
 
-class DemoInheritedWidget extends StatefulWidget {
-  const DemoInheritedWidget({Key? key}) : super(key: key);
-
-  @override
-  State<DemoInheritedWidget> createState() => _DemoInheritedWidgetState();
-}
-
-class _DemoInheritedWidgetState extends State<DemoInheritedWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Demo Inherited"),
+        title: Text("Demo Build Context"),
       ),
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        child: InheritedContainer(
-          listWidget: [
-            TextWidget(text: "Widget 1")
-          ],
-        ),
+      body: ParentContainer(
+        child: Children(),
       ),
     );
   }
 }
 
-class InheritedContainer extends StatefulWidget {
-  List<Widget>? listWidget;
-  InheritedContainer({Key? key, this.listWidget}) : super(key: key);
+class ParentContainer extends StatefulWidget {
+
+  Widget? child;
+
+  ParentContainer({this.child});
 
   @override
-  State<InheritedContainer> createState() => _InheritedContainerState();
+  State<ParentContainer> createState() => _ParentContainerState();
 }
 
-class _InheritedContainerState extends State<InheritedContainer> {
+class _ParentContainerState extends State<ParentContainer> {
+  int number = 0;
+
+  void randomNumber() {
+    setState(() {
+      number = Random().nextInt(100);
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    final widgetParent = widget.listWidget?[0] ?? SizedBox();
     return Container(
-      constraints: BoxConstraints.expand(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          widgetParent,
+          Text("Value = $number", style: TextStyle(fontSize: 30),),
           ElevatedButton(
               onPressed: (){
-
+                randomNumber();
               },
-              child: Text("Change Text")
-          )
+              child: Text("Random number")
+          ),
+          MyInheritedContainer(child: widget.child ?? SizedBox(), number: number)
         ],
       ),
     );
   }
 }
 
+class MyInheritedContainer extends InheritedWidget {
+  late Widget child;
+  late int? number;
+  MyInheritedContainer({required Widget child, required int number}) : super (child: child){
+    this.child = child;
+    this.number = number;
+  }
 
-class TextWidget extends StatelessWidget {
-  String text = "";
-  TextWidget({Key? key, String text = ""}) : super(key: key){
-    this.text = text;
+  static MyInheritedContainer? of(BuildContext context){
+    return context.dependOnInheritedWidgetOfExactType();
   }
 
   @override
+  bool updateShouldNotify(covariant MyInheritedContainer oldWidget) {
+    return true;
+  }
+}
+
+class Children extends StatelessWidget {
+
+  @override
   Widget build(BuildContext context) {
-    return Text(text);
+    MyInheritedContainer? containerValue = MyInheritedContainer.of(context);
+    return Container(
+      child: Center(
+        child: Text("Children ${containerValue?.number ?? 0}"),
+      ),
+    );
   }
 }
